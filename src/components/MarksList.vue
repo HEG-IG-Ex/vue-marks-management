@@ -1,14 +1,36 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 
-const marks = ref([
-  { id: 1, date: '2021-09-01', subject: 'Math', mark: 90, professor: 'John Doe' },
-  { id: 2, date: '2021-10-02', subject: 'Science', mark: 85, professor: 'Jane Smith' },
-  { id: 3, date: '2021-11-03', subject: 'English', mark: 95, professor: 'Michael Johnson' },
-  { id: 4, date: '2021-10-04', subject: 'History', mark: 80, professor: 'Sarah Williams' },
-  { id: 5, date: '2021-12-10', subject: 'Geography', mark: 65, professor: 'Robert Brown' },
-  { id: 6, date: '2021-10-10', subject: 'Geography', mark: 75, professor: 'Robert Brown' }
+const sampleMarks = ref([
+  { id: 1, date: '2021-09-01', subject: 'math', mark: 90, professor: 'John Doe' },
+  { id: 2, date: '2021-10-02', subject: 'science', mark: 85, professor: 'Jane Smith' },
+  { id: 3, date: '2021-11-03', subject: 'english', mark: 95, professor: 'Michael Johnson' },
+  { id: 4, date: '2021-10-04', subject: 'history', mark: 80, professor: 'Sarah Williams' },
+  { id: 5, date: '2021-12-10', subject: 'geography', mark: 65, professor: 'Robert Brown' },
+  { id: 6, date: '2021-10-10', subject: 'geography', mark: 75, professor: 'Robert Brown' }
 ])
+
+const marks = ref([])
+
+// Manage local storage
+onMounted(() => {
+  loadMarks()
+  saveMarks()
+})
+
+const loadMarks = () => {
+  const savedMarks = localStorage.getItem('marks')
+  marks.value = savedMarks ? JSON.parse(savedMarks) : sampleMarks.value
+}
+const saveMarks = () => {
+  localStorage.setItem('marks', JSON.stringify(marks.value))
+}
+
+const removeMark = (mark) => {
+  const idx = marks.value.indexOf(mark)
+  marks.value.splice(idx, 1)
+  saveMarks()
+}
 
 // Manage filtering
 const props = defineProps(['selectedCourse', 'searchQuery'])
@@ -70,10 +92,10 @@ const sortedMarks = computed(() => {
     <tbody>
       <tr class="mark-table-row" v-for="mark in sortedMarks" :key="mark.id">
         <td>{{ mark.date }}</td>
-        <td>{{ mark.subject }}</td>
+        <td>{{ mark.subject.charAt(0).toUpperCase() + mark.subject.slice(1) }}</td>
         <td>{{ mark.professor }}</td>
         <td>{{ mark.mark }}</td>
-        <td><button>X</button></td>
+        <td><button @click="removeMark(mark)">X</button></td>
       </tr>
     </tbody>
   </table>
