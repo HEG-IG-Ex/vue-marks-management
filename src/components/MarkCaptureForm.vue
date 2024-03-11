@@ -5,12 +5,19 @@ import { nanoid } from 'nanoid'
 import { useRouter } from 'vue-router'
 const router = useRouter()
 
+import CourseSelect from './CourseSelect.vue'
+
 const courses = ['All', 'Math', 'Science', 'English', 'History', 'Geography']
+
+function updateCourseSelected(course) {
+  console.log(course)
+  mark.value.course = course
+}
 
 const mark = ref({
   id: nanoid(),
   date: '',
-  subject: '',
+  course: '',
   professor: '',
   mark: ''
 })
@@ -60,17 +67,7 @@ const saveMarks = () => {
     </div>
 
     <div class="form-group">
-      <label for="course">Course</label>
-      <select id="course" v-model="mark.subject" required>
-        <option
-          v-for="(course, idx) in courses"
-          :key="idx"
-          :value="course.toLowerCase()"
-          id="course"
-        >
-          {{ course }}
-        </option>
-      </select>
+      <CourseSelect :courses="courses" @onCourseSelected="updateCourseSelected" />
     </div>
 
     <div class="form-group">
@@ -101,6 +98,11 @@ form {
 .form-group {
   display: flex;
   flex-direction: column;
+}
+label {
+  margin-bottom: 5px;
+  color: var(--color-secondary);
+  font-weight: bold;
 }
 .form-button-group {
   display: flex;

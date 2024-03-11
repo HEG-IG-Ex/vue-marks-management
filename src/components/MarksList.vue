@@ -1,13 +1,14 @@
 <script setup>
 import { computed, ref, onMounted } from 'vue'
+import MarkListRow from './MarkListRow.vue'
 
 const sampleMarks = ref([
-  { id: 1, date: '2021-09-01', subject: 'math', mark: 90, professor: 'John Doe' },
-  { id: 2, date: '2021-10-02', subject: 'science', mark: 85, professor: 'Jane Smith' },
-  { id: 3, date: '2021-11-03', subject: 'english', mark: 95, professor: 'Michael Johnson' },
-  { id: 4, date: '2021-10-04', subject: 'history', mark: 80, professor: 'Sarah Williams' },
-  { id: 5, date: '2021-12-10', subject: 'geography', mark: 65, professor: 'Robert Brown' },
-  { id: 6, date: '2021-10-10', subject: 'geography', mark: 75, professor: 'Robert Brown' }
+  { id: 1, date: '2021-09-01', course: 'math', mark: 90, professor: 'John Doe' },
+  { id: 2, date: '2021-10-02', course: 'science', mark: 85, professor: 'Jane Smith' },
+  { id: 3, date: '2021-11-03', course: 'english', mark: 95, professor: 'Michael Johnson' },
+  { id: 4, date: '2021-10-04', course: 'history', mark: 80, professor: 'Sarah Williams' },
+  { id: 5, date: '2021-12-10', course: 'geography', mark: 65, professor: 'Robert Brown' },
+  { id: 6, date: '2021-10-10', course: 'geography', mark: 75, professor: 'Robert Brown' }
 ])
 
 const marks = ref([])
@@ -27,6 +28,7 @@ const saveMarks = () => {
 }
 
 const removeMark = (mark) => {
+  console.log(mark)
   const idx = marks.value.indexOf(mark)
   marks.value.splice(idx, 1)
   saveMarks()
@@ -43,7 +45,7 @@ const filteredMarks = computed(() => {
     }
     return (
       mark.professor.toLowerCase().includes(props.searchQuery.toLowerCase()) &&
-      mark.subject.toLowerCase() === props.selectedCourse
+      mark.course.toLowerCase() === props.selectedCourse
     )
   })
   return result
@@ -90,13 +92,7 @@ const sortedMarks = computed(() => {
       <th>Action</th>
     </thead>
     <tbody>
-      <tr class="mark-table-row" v-for="mark in sortedMarks" :key="mark.id">
-        <td>{{ mark.date }}</td>
-        <td>{{ mark.subject.charAt(0).toUpperCase() + mark.subject.slice(1) }}</td>
-        <td>{{ mark.professor }}</td>
-        <td>{{ mark.mark }}</td>
-        <td><button @click="removeMark(mark)">X</button></td>
-      </tr>
+      <MarkListRow :marks="sortedMarks" @onRemoveClicked="removeMark" />
     </tbody>
   </table>
 </template>
@@ -107,20 +103,12 @@ const sortedMarks = computed(() => {
   width: 100%;
   border-collapse: collapse;
 }
-.mark-table th,
-.mark-table td {
+.mark-table th {
   border-bottom: 1px solid #000;
   padding: 0.5rem;
 }
 .mark-table th {
   background-color: #f0f0f0;
-}
-.mark-table-row:nth-child(even) {
-  background-color: #f0f0f0;
-}
-
-.mark-table-row:nth-child(odd) {
-  background-color: #ffffff;
 }
 .mark-table th {
   text-align: left;

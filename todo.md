@@ -1,5 +1,7 @@
-- [ ] Clear all the files created by the template
-- [ ] Build the App.vue with two View ""View" & "Capture"
-- [ ] Build one component MarkList
-- [ ] Build one component MarkListRow
-- [ ] Build one component MarkCaptureForm
+- [x] Clear all the files created by the template
+- [x] Build the App.vue with two View ""View" & "Capture"
+- [x] Build one component MarkList
+- [x] Build one component MarkListRow
+- [x] Build one component CourseSelect
+- [ ] Migrate the marks to a pina storage
+- [x] Build one component MarkCaptureForm

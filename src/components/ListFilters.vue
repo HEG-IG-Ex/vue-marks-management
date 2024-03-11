@@ -1,11 +1,13 @@
 <script setup>
+import CourseSelect from './CourseSelect.vue'
+
 const courses = ['All', 'Math', 'Science', 'English', 'History', 'Geography']
 
 // Emit event in the parent component
 const emit = defineEmits(['onSearchChanged', 'onCourseSelected'])
 
-function emitCourseSelected(e) {
-  emit('onCourseSelected', e.target.value)
+function emitCourseSelected(course) {
+  emit('onCourseSelected', course)
 }
 function emitSearchChanged(e) {
   emit('onSearchChanged', e.target.value)
@@ -26,12 +28,7 @@ function emitSearchChanged(e) {
     </div>
 
     <div class="filter-item">
-      <label for="course" class="filter-label">Category</label>
-      <select id="course" class="filter-item" @change="emitCourseSelected">
-        <option v-for="(category, idx) in courses" :key="idx" :value="category.toLowerCase()">
-          {{ category }}
-        </option>
-      </select>
+      <CourseSelect :courses="courses" @onCourseSelected="emitCourseSelected" />
     </div>
   </div>
 </template>
@@ -43,9 +40,9 @@ function emitSearchChanged(e) {
   margin-bottom: 20px;
 }
 .filter-item {
-  margin-right: 20px;
   display: flex;
   flex-direction: column;
+  margin-right: 20px;
 }
 .filter-label {
   margin-bottom: 5px;
